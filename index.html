@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pseudo Warehouse Management System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header>
+        <h1>Pseudo Warehouse Management System</h1>
+        <p>Manage inventory discrepancies and optimize order fulfillment with greedy algorithm</p>
+    </header>
+    
+    <main>
+        <div class="container">
+            <!-- Dashboard Stats -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <h3 id="total-inventory">125</h3>
+                    <p>Total Inventory</p>
+                    <span>Items in primary system</span>
+                </div>
+                <div class="stat-card">
+                    <h3 id="misplaced-items">1</h3>
+                    <p>Misplaced Items</p>
+                    <span>Items in wrong locations</span>
+                </div>
+                <div class="stat-card">
+                    <h3 id="pending-orders">1</h3>
+                    <p>Pending Orders</p>
+                    <span>Orders awaiting fulfillment</span>
+                </div>
+                <div class="stat-card">
+                    <h3 id="material-types">1</h3>
+                    <p>Material Types</p>
+                    <span>Different materials tracked</span>
+                </div>
+            </div>
+            
+            <!-- Navigation Tabs -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+                <button class="tab-btn" data-tab="primary">Primary System</button>
+                <button class="tab-btn" data-tab="pseudo">Pseudo System</button>
+                <button class="tab-btn" data-tab="order">Order Processing</button>
+            </div>
+            
+            <div class="tab-content">
+                <!-- Dashboard Tab -->
+                <div id="dashboard" class="tab-pane active">
+                    <div class="dashboard-content">
+                        <div class="chart-container">
+                            <!-- Charts would go here in a real implementation -->
+                            <div class="placeholder-chart">
+                                <h3>Inventory Distribution</h3>
+                                <div class="chart-placeholder">Chart visualization would appear here</div>
+                            </div>
+                            <div class="placeholder-chart">
+                                <h3>Location Accuracy</h3>
+                                <div class="chart-placeholder">Chart visualization would appear here</div>
+                            </div>
+                        </div>
+                        <div class="recent-activity">
+                            <h3>Recent Activity</h3>
+                            <ul class="activity-list" id="activity-log">
+                                <li>System initialized with Steel Rods inventory</li>
+                                <li>Found 25 Steel Rods misplaced in B2-05 location</li>
+                                <li>Order #57749991 created for 85 Steel Rods</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Primary System Tab -->
+                <div id="primary" class="tab-pane">
+                    <div class="system-card">
+                        <div class="card-header primary-header">
+                            <h2>Primary Warehouse System</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="primary-material">Material Name</label>
+                                        <input type="text" id="primary-material" placeholder="Enter material name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="primary-quantity">Quantity</label>
+                                        <input type="number" id="primary-quantity" value="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="primary-location">Location</label>
+                                        <input type="text" id="primary-location" placeholder="e.g. A1-01">
+                                    </div>
+                                    <div class="form-group button-group">
+                                        <button id="add-primary-item" class="action-button">Add Material</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="data-table">
+                                <table id="primary-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Material Name</th>
+                                            <th>Location</th>
+                                            <th>Quantity</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Data will be populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pseudo System Tab -->
+                <div id="pseudo" class="tab-pane">
+                    <div class="system-card">
+                        <div class="card-header pseudo-header">
+                            <h2>Pseudo Warehouse System</h2>
+                            <span class="badge" id="misplaced-badge">Misplaced Items: 2</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-form highlight-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="pseudo-material">Material</label>
+                                        <select id="pseudo-material">
+                                            <option value="">Select...</option>
+                                            <!-- Options will be populated by JavaScript -->
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pseudo-expected-location">Expected Location</label>
+                                        <input type="text" id="pseudo-expected-location" placeholder="Auto-filled" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pseudo-actual-location">Actual Location</label>
+                                        <input type="text" id="pseudo-actual-location" placeholder="e.g. B2-05">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="pseudo-quantity">Quantity</label>
+                                        <input type="number" id="pseudo-quantity" value="0">
+                                    </div>
+                                    <div class="form-group button-group">
+                                        <button id="add-pseudo-item" class="action-button">Add Misplaced</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="data-table">
+                                <table id="pseudo-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Material Name</th>
+                                            <th>Expected Location</th>
+                                            <th>Actual Location</th>
+                                            <th>Quantity</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Data will be populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Order Processing Tab -->
+                <div id="order" class="tab-pane">
+                    <div class="system-card">
+                        <div class="card-header order-header">
+                            <h2>Order Processing System</h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-form">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="order-material">Material</label>
+                                        <select id="order-material">
+                                            <option value="">Select material</option>
+                                            <!-- Options will be populated by JavaScript -->
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="order-quantity">Quantity</label>
+                                        <input type="number" id="order-quantity" value="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="order-expected-location">Expected Location</label>
+                                        <input type="text" id="order-expected-location" placeholder="Auto-filled" readonly>
+                                    </div>
+                                    <div class="form-group button-group">
+                                        <button id="create-order" class="action-button">Create Order</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="alert-box">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                <span>Orders are processed automatically: Primary system first, then pseudo system for location discrepancies.</span>
+                            </div>
+                            
+                            <div class="data-table">
+                                <table id="order-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Material</th>
+                                            <th>Requested Qty</th>
+                                            <th>Status</th>
+                                            <th>Fulfilled From</th>
+                                            <th>Location</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Orders will be populated by JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="order-section" class="hidden">
+                <h2>Create Order</h2>
+                <form id="order-form">
+                    <div class="form-group">
+                        <label for="order-material">Material:</label>
+                        <select id="order-material" required>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="order-quantity">Quantity:</label>
+                        <input type="number" id="order-quantity" min="1" required>
+                    </div>
+                    <div class="form-buttons">
+                        <button type="submit">Submit Order</button>
+                        <button type="button" id="cancel-order">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            
+            <div id="add-item-modal" class="modal hidden">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2 id="modal-title">Add New Item</h2>
+                    <form id="add-item-form">
+                        <div class="form-group">
+                            <label for="item-location">Location:</label>
+                            <input type="text" id="item-location" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="item-material">Material:</label>
+                            <input type="text" id="item-material" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="item-quantity">Quantity:</label>
+                            <input type="number" id="item-quantity" min="1" required>
+                        </div>
+                        <input type="hidden" id="system-type" value="primary">
+                        <button type="submit">Save</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div id="order-result" class="modal hidden">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Order Result</h2>
+                    <div id="order-result-content"></div>
+                    <button id="close-result">Close</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 Warehouse Management System</p>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>
